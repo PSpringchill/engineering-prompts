@@ -1,0 +1,1 @@
+A detailed 16th-century Flemish winter village scene, inspired by Pieter Bruegel the Elder, muted earthy colors, pale winter light, high level of detail, atmospheric perspective, oil painting on panel, historical European realism, subtle storytelling in every figure, for post on social media

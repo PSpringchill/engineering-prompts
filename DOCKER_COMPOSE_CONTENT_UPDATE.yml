@@ -1,0 +1,69 @@
+# Add these services to your existing docker-compose.yml
+
+services:
+  researcher-agent:
+    build:
+      context: ./agents/content_agents
+      dockerfile: Dockerfile
+    container_name: automation-researcher-agent
+    environment:
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_USER: guest
+      RABBITMQ_PASS: guest
+      LOG_LEVEL: INFO
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    volumes:
+      - ./agents/content_agents/logs:/app/logs
+    networks:
+      - automation
+    restart: unless-stopped
+    command: python -u researcher_agent.py
+
+  creator-agent:
+    build:
+      context: ./agents/content_agents
+      dockerfile: Dockerfile
+    container_name: automation-creator-agent
+    environment:
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_USER: guest
+      RABBITMQ_PASS: guest
+      LOG_LEVEL: INFO
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    volumes:
+      - ./agents/content_agents/logs:/app/logs
+    networks:
+      - automation
+    restart: unless-stopped
+    command: python -u creator_agent.py
+
+  scheduler-agent:
+    build:
+      context: ./agents/content_agents
+      dockerfile: Dockerfile
+    container_name: automation-scheduler-agent
+    environment:
+      TWITTER_API_KEY: ${TWITTER_API_KEY}
+      TWITTER_API_SECRET: ${TWITTER_API_SECRET}
+      TWITTER_BEARER_TOKEN: ${TWITTER_BEARER_TOKEN}
+      TWITTER_ACCESS_TOKEN: ${TWITTER_ACCESS_TOKEN}
+      TWITTER_ACCESS_TOKEN_SECRET: ${TWITTER_ACCESS_TOKEN_SECRET}
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_USER: guest
+      RABBITMQ_PASS: guest
+      LOG_LEVEL: INFO
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    volumes:
+      - ./agents/content_agents/logs:/app/logs
+    networks:
+      - automation
+    restart: unless-stopped
+    command: python -u scheduler_agent.py
